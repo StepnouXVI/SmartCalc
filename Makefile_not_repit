@@ -1,0 +1,101 @@
+ROOT_DIR = tests/
+FUNCTIONS = -DFALSE
+CC = gcc
+FLAGS = -Wall -Wextra -Werror -g
+INC_LIB = -L. -I.
+
+OBJ_DIR = obj/
+OPERATIONS_DIR = operations/
+QUEUE_DIR = Queue/
+STACK_DIR = Stack/
+STRING_DIR = String/
+
+OPERATIONS_OBJ_DIR = ${OBJ_DIR}${OPERATIONS_DIR}
+QUEUE_OBJ_DIR = ${OBJ_DIR}${QUEUE_DIR}
+STACK_OBJ_DIR = ${OBJ_DIR}${STACK_DIR}
+STRING_OBJ_DIR = ${OBJ_DIR}${STRING_DIR}
+
+EXECUTEBLE_SRC = main.c
+EXECUTEBLE_OBJ = OBJ = ${patsubst %.c, ${OBJ_DIR}%.o, ${EXECUTEBLE_SRC}}
+EXECUTEBLE = exec
+
+SRC = ${wildcard $(OPERATIONS_DIR)*.c}
+SRC += ${wildcard $(QUEUE_DIR)*.c}
+SRC += ${wildcard $(STACK_DIR)*.c}
+SRC += ${wildcard $(STRING_DIR)*.c}
+SRC += ${EXECUTEBLE_SRC}
+
+OBJ = ${patsubst %.c, ${OBJ_DIR}%.o, $(SRC)}
+
+define Compile_C
+	${CC} ${Flags} ${INC_LIB} ${1} -c;
+endef
+
+define Print
+	@echo ${1}
+endef
+
+vpath %.c $(OPERATIONS_DIR)
+vpath %.c $(QUEUE_DIR)
+vpath %.c $(STACK_DIR)
+vpath %.c $(STRING_DIR)
+
+
+all: ${OBJ_DIR} ${EXECUTEBLE}
+
+# ${OBJ}: ${OBJ_DIR} ${SRC}
+# 	$(foreach src,$(SRC), $(call Compile_C, $(src)))
+# 	@mv ./*o ${OBJ_DIR}
+
+
+${OPERATIONS_OBJ_DIR}%.o: %.c
+	@mkdir -p ${OBJ_DIR}${OPERATIONS_DIR}
+	$(CC) $(FLAGS) -c $< -o $@
+
+${QUEUE_OBJ_DIR}%.o: %.c 
+	@mkdir -p ${OBJ_DIR}${QUEUE_DIR}
+	$(CC) $(FLAGS) -c $< -o $@
+
+${STACK_OBJ_DIR}%.o: %.c 
+	@mkdir -p ${OBJ_DIR}${STACK_DIR}
+	$(CC) $(FLAGS) -c $< -o $@
+
+${STRING_OBJ_DIR}%.o: %.c 
+	@mkdir -p ${OBJ_DIR}${STRING_DIR}
+	$(CC) $(FLAGS) -c $< -o $@
+
+${EXECUTEBLE_OBJ}: ${EXECUTEBLE_SRC}
+	$(CC) $(FLAGS) -c $< -o $@
+
+${OBJ_DIR}:
+	@mkdir -p ${OBJ_DIR}
+
+${EXECUTEBLE}: ${OBJ}
+	$(CC) $(FLAGS) ${OBJ} -o $@
+
+
+
+
+
+
+
+
+
+
+
+update: clean all
+
+.PHONY:C\#_api
+
+style_test_check:
+	bash ./clang-format-script-helper.sh -n
+
+style_test_fix:
+	bash ./clang-format-script-helper.sh -i
+
+clean:
+	rm -fr ${OPERATIONS_OBJ_DIR}
+	rm -fr ${QUEUE_OBJ_DIR}
+	rm -fr ${STACK_OBJ_DIR}
+	rm -fr ${STRING_OBJ_DIR}
+	rm -fr ${OBJ_DIR}
