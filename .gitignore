@@ -1,0 +1,6 @@
+*.log
+*.replit 
+*.cache
+*.breakpoints
+main
+replit.nix
