@@ -1,6 +1,6 @@
 #include "../libs/String.h"
 
-void ClearString(String *string) {
+void DestructString(String *string) {
   string->Size = 0;
   if (string->String != NULL) free(string->String);
   string->String = NULL;
@@ -59,3 +59,17 @@ String Replace(String string, const String replacement, char symb) {
 }
 
 bool IsDigit(char symb) { return symb >= '0' && symb <= '9'; }
+
+void ShiftString(String *string, size_t shift) {
+  char *new_string = (char *)malloc(sizeof(char) * (string->Size - shift));
+  memcpy(new_string, string->String + shift, string->Size - shift);
+  free(string->String);
+  string->String = new_string;
+  string->Size -= shift;
+}
+
+void ConcatN(String *res, const String *src, size_t n) {
+  for (size_t i = 0; i < n; i++) {
+    AddChar(res, src->String[i]);
+  }
+}

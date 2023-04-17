@@ -14,13 +14,15 @@ typedef struct Stirng {
   { NULL, 0 }
 
 void AddChar(String *string, char symb);
-void ClearString(String *string);
+void DestructString(String *string);
 String MakeClearString(void);
 bool IsDigit(char symb);
 String ReadStringWithoutSpaces(FILE *file);
 String Remove(String *string, char symb);
 bool IsEqual(String str1, String str2);
 String Replace(String string, const String replacement, char symb);
+void ShiftString(String *string, size_t shift);
+void ConcatN(String *res, const String *src, size_t n);
 
 #define foreach(string, el)                             \
   {                                                     \
@@ -32,4 +34,5 @@ String Replace(String string, const String replacement, char symb);
   }         \
   }
 
+#define isLetters(symb) ((symb >= 'a' && symb <= 'z'))
 #endif
